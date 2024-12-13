@@ -26,9 +26,10 @@ namespace BlogosphereAPI.Repositories
             return tag;
         }
 
-        public async Task<Tag> DeleteTagAsync(string name)
+        public async Task<Tag> DeleteTagAsync(string id)
         {
-            var res= await FindByNameAsync(name);
+            var Id=Guid.Parse(id);
+            var res= await context.Tags.FirstOrDefaultAsync(x=>x.Id==Id);
             if (res != null)
             { 
                 context.Tags.Remove(res);
@@ -49,39 +50,23 @@ namespace BlogosphereAPI.Repositories
             return await context.Tags.ToListAsync();
         }
 
-        //public async Task<Tag> UpdateTagAsync(Tag tag, string tagName)
-        //{
-        //    var checkUpdateName =await FindByNameAsync(tag.Name);
-        //    if (checkUpdateName != null)
-        //    {
-        //        return null;
-        //    }
-
-        //   var res= await FindByNameAsync(tagName);
-        //    if (res != null) 
-        //    { 
-        //        res.DisplayName = tag.DisplayName;
-        //        res.Name = tag.Name;
-        //        await context.SaveChangesAsync();
-        //        return tag;
-        //    }
-        //    else
-        //    {
-
-        //    return null;
-        //    }
-        //}
-        public async Task<Tag> UpdateTagAsync(Tag tag, string oldName)
+        public async Task<Tag> GetByIdAsync(Guid id)
         {
-            // Check if the new name already exists
-            var checkUpdateName = await FindByNameAsync(tag.Name);
-            if (checkUpdateName != null)
+            var foundTag=await context.Tags.FirstOrDefaultAsync(x=>x.Id == id);
+            if (foundTag ==null)
             {
-                return null; // The new name is already in use
+                return null;
             }
+            return foundTag;
+        }
+
+        public async Task<Tag> UpdateTagAsync(Tag tag, Guid id)
+        {
+            
+            
 
             // Find the tag using the old name
-            var existingTag = await FindByNameAsync(oldName);
+            var existingTag = await context.Tags.FirstOrDefaultAsync(x => x.Id == id);
             if (existingTag != null)
             {
                 // Update the properties of the tag

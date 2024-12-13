@@ -4,6 +4,7 @@ using BlogosphereAPI.Models.DTOs;
 using BlogosphereAPI.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BlogosphereAPI.Controllers
 {
@@ -39,7 +40,7 @@ namespace BlogosphereAPI.Controllers
             {
                 return BadRequest(new
                 {
-                    message = "Sorry, the tag already exists",
+                    message = "Tag already exists",
                     tag = existingTag
                 });
             }
@@ -57,10 +58,10 @@ namespace BlogosphereAPI.Controllers
             });
         }
 
-        [HttpPut("{name}")] // This route accepts a Name as a URL parameter for identifying the tag to update 
-        public async Task<IActionResult> UpdateTag([FromBody] TagDto _tag, [FromRoute] string name)
+        [HttpPut("{id}")] // This route accepts a Name as a URL parameter for identifying the tag to update 
+        public async Task<IActionResult> UpdateTag([FromBody] TagDto _tag, [FromRoute] string id)
         {
-            if (_tag == null || name == null)
+            if (_tag == null || id == null)
             {
                 return BadRequest(new { message = "Tag data is required" });
             }
@@ -74,13 +75,25 @@ namespace BlogosphereAPI.Controllers
                 Name = formattedNewName, // Assign the Name from TagDto to the domain model
                 DisplayName = _tag.DisplayName // Assign the DisplayName from TagDto to the domain model
             };
+            var Guidid = Guid.Parse(id);
             // Call the repository to update the tag in the database
-            var updatedTag = await tagRepository.UpdateTagAsync(tag, name);
+            var updatedTag = await tagRepository.UpdateTagAsync(tag, Guidid);
             // Check if the update was successful (if a tag was found and updated)
+
             if (updatedTag != null)
             {
+                TagDto tagDto = new TagDto
+                {
+                    Id=updatedTag.Id,
+                    Name=updatedTag.Name,
+                    DisplayName=updatedTag.DisplayName
+                };
                 // Return the updated tag as the response with a 200 OK status
-                return Ok(updatedTag);
+                return Ok(new
+                {
+                    tagDto,
+                    Message="Tag successfully updated."
+                });
             }
             else
             {
@@ -89,35 +102,84 @@ namespace BlogosphereAPI.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteTag([FromBody] TagDto _tag)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTagById([FromRoute] string id)
         {
-            //check for null 
-            if (_tag == null)
+            if (string.IsNullOrEmpty(id))
             {
-                return BadRequest(new { message = "Tag data is required" });
-            }
-            // Map the incoming TagDto to a domain model (Tag)
-            var tag = new Tag
-            {
-                Name = _tag.Name, // Assign the Name from TagDto to the domain model
-                DisplayName = _tag.DisplayName // Assign the DisplayName from TagDto to the domain model
-            };
-            // Call the repository to update the tag in the database
-            var deletedTag = await tagRepository.DeleteTagAsync(tag.Name);
-            // Check if the update was successful (if a tag was found and updated)
-            if (deletedTag != null)
-            {
-                // Return the updated tag as the response with a 200 OK status
-                return Ok();
-            }
-            else
-            {
-                // Return a 400 Bad Request response with an appropriate message
-                return BadRequest("Bad request! No such tag found to Delete.");
+                return BadRequest(new { message = "Tag ID is required." });
             }
 
+            try
+            {
+                // Try to parse the ID as a GUID
+                if (!Guid.TryParse(id, out Guid guidId))
+                {
+                    return BadRequest(new { message = "Invalid Tag ID format." });
+                }
+
+                var foundTag = await tagRepository.GetByIdAsync(guidId);
+                
+
+                if (foundTag != null)
+                {
+                    TagDto tagDto = new TagDto
+                    {
+                        Id = foundTag.Id,
+                        Name = foundTag.Name,
+                        DisplayName = foundTag.DisplayName
+                    };
+                    return Ok(tagDto); // Return the found tag
+                }
+                else
+                {
+                    return NotFound(new { message = "Sorry! No such Tag found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle unexpected errors
+                return StatusCode(500, new { message = "An error occurred while fetching the tag.", error = ex.Message });
+            }
         }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTag([FromRoute] string id)
+        {
+            // Check for null or empty ID
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest(new { message = "Tag ID is required." });
+            }
+
+            try
+            {
+                // Attempt to delete the tag
+                var deletedTag = await tagRepository.DeleteTagAsync(id);
+
+                if (deletedTag != null)
+                {
+                    // Return success with the deleted tag details
+                    return Ok(new
+                    {
+                        message = "Tag deleted successfully.",
+                        tag = new { deletedTag.Id, deletedTag.Name, deletedTag.DisplayName }
+                    });
+                }
+                else
+                {
+                    // Return not found if the tag doesn't exist
+                    return NotFound(new { message = "No tag found with the provided ID." });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle unexpected errors
+                return StatusCode(500, new { message = "An error occurred while deleting the tag.", error = ex.Message });
+            }
+        }
+
 
         [HttpGet]
         public async Task<IEnumerable<TagDto>> GetAllTags()
