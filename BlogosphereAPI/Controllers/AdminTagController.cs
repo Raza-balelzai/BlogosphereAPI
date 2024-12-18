@@ -164,7 +164,7 @@ namespace BlogosphereAPI.Controllers
                     return Ok(new
                     {
                         message = "Tag deleted successfully.",
-                        tag = new { deletedTag.Id, deletedTag.Name, deletedTag.DisplayName }
+                        item = deletedTag.DisplayName
                     });
                 }
                 else
@@ -182,7 +182,7 @@ namespace BlogosphereAPI.Controllers
 
 
         [HttpGet]
-        public async Task<IEnumerable<TagDto>> GetAllTags()
+        public async Task<IActionResult> GetAllTags()
         {
            var domainModels= await tagRepository.GetAllTagsAsync();
             // Convert each domain model to a DTO
@@ -194,7 +194,7 @@ namespace BlogosphereAPI.Controllers
             });
 
             // Return the collection of DTOs
-            return tagDtos;
+            return Ok(tagDtos);
         }
 
     }
