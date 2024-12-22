@@ -67,7 +67,10 @@ namespace BlogosphereAPI.Controllers
 
             if (createdBlogPost != null)
             {
-                return Ok(createdBlogPost);
+                return Ok(new
+                {
+                    message="Blog Post Added Successfully."
+                });
             }
 
             return Problem("An error occurred while creating the blog post.", null, (int)HttpStatusCode.InternalServerError);

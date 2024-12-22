@@ -49,7 +49,10 @@ namespace BlogosphereAPI.Controllers
             // Check if the tag was added successfully
             if (addedTag != null)
             {
-                return Ok(addedTag); // Return 200 OK with the added tag
+                return Ok(new
+                {
+                    message="Tag created successfully",
+                }); // Return 200 OK with the added tag
             }
             // If the tag was not added, return an error response
             return StatusCode(StatusCodes.Status500InternalServerError, new

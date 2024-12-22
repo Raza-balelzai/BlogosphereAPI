@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogosphereAPI", "BlogosphereAPI\BlogosphereAPI.csproj", "{11058360-919D-4B8C-8495-842E7F239B1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogosphereAPI", "BlogosphereAPI\BlogosphereAPI.csproj", "{11058360-919D-4B8C-8495-842E7F239B1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogosphereUserAPI", "BlogosphereUserAPI\BlogosphereUserAPI.csproj", "{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{11058360-919D-4B8C-8495-842E7F239B1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11058360-919D-4B8C-8495-842E7F239B1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11058360-919D-4B8C-8495-842E7F239B1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
