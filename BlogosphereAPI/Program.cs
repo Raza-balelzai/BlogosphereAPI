@@ -6,19 +6,30 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<BlogosphereDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("dbcs")));
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowReactApp", policy =>
+//    {
+//        policy.WithOrigins("http://localhost:5173") // Allow requests from React app
+//              .AllowAnyHeader() // Allow all headers
+//              .AllowAnyMethod(); // Allow GET, POST, PUT, DELETE, etc.
+//    });
+
+//});
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", policy =>
+    options.AddPolicy("AllowGateway", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // Allow requests from React app
+        policy.WithOrigins("https://localhost:7400") // Allow requests from the gateway
               .AllowAnyHeader() // Allow all headers
-              .AllowAnyMethod(); // Allow GET, POST, PUT, DELETE, etc.
+              .AllowAnyMethod() // Allow all HTTP methods
+              .AllowCredentials(); // Allow cookies if needed
     });
-
 });
 builder.Services.AddControllers();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+builder.Services.AddScoped<IBlogPostLikeRepository, BlogPostLikeRepository>();
 builder.Services.AddScoped<IimageRepository, ImageRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -32,7 +43,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("AllowReactApp");
+//app.UseCors("AllowReactApp");
+app.UseCors("AllowGateway");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

@@ -1,0 +1,104 @@
+{
+  //the jwt token passed from the signin method contains the isAdmin,isUser,isSuperAdmin(on the basis of role)
+  //as Bool and here in routes that bool properties passed will be checked on authenticated routes
+  //superAdmin Have three roles User,SuperAdmin,Admin
+  //Admin Have two roles User,Admin
+  //Whereas user have only a User role
+  "Routes": [
+    //BlogPostRoutes which are public.User can only Get BlogPosts
+    {
+      "DownstreamPathTemplate": "/api/AdminBlogPosts/{everything}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7200
+        }
+      ],
+      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/AdminBlogPosts/{everything}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    ///////////////////////////////////////////////////////////////////////
+    //BlogPostRoutes which are private.Admin and Super Admin can only Access
+    {
+      "DownstreamPathTemplate": "/api/AdminBlogPosts/{everything}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7200
+        }
+      ],
+      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/AdminBlogPosts/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      //Authentication for superAdmin and Admin
+      "RouteClaimsRequirement": {
+        "isAdmin": "true"
+      }
+    },
+    ////////////////////////////////////////////////////////////////
+    //BlogTag routes which are public.the User can only Get BlogTags
+    {
+      "DownstreamPathTemplate": "/api/AdminTags/{everything}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7200
+        }
+      ],
+      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/AdminTags/{everything}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    /////////////////////////////////////////////////////////////////////////
+    //BlogTag routes which are Private.these are for admin and superAdmin Only
+    {
+      "DownstreamPathTemplate": "/api/AdminTags/{everything}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7200
+        }
+      ],
+      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/AdminTags/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      //Authentication for superAdmin and Admin
+      "RouteClaimsRequirement": {
+        "isAdmin": "true"
+      }
+    },
+    //////////////////////////////////////////////////////////
+    {
+      "DownstreamPathTemplate": "/api/Account/{everything}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7078
+        }
+      ],
+      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/api/Account/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    }
+  ],
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug",
+      "Microsoft": "Information",
+      "Ocelot": "Debug"
+    }
+  },
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7400"
+  }
+
+}

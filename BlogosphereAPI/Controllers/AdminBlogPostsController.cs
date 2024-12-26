@@ -15,7 +15,7 @@ namespace BlogosphereAPI.Controllers
         private readonly IimageRepository imageRepository;
         private readonly ITagRepository tagRepository;
 
-        public AdminBlogPostsController(IBlogPostRepository blogPostRepository, IimageRepository imageRepository, ITagRepository tagRepository)
+        public AdminBlogPostsController(IBlogPostRepository blogPostRepository,IimageRepository imageRepository, ITagRepository tagRepository)
         {
             this.blogPostRepository = blogPostRepository;
             this.imageRepository = imageRepository;

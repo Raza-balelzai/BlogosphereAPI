@@ -5,6 +5,7 @@ using BlogosphereAPI.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BlogosphereAPI.Controllers
 {
@@ -148,10 +149,11 @@ namespace BlogosphereAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTag([FromRoute] string id)
+        public async Task<IActionResult> DeleteTag([FromRoute] string? routeId, [FromQuery] string? querryId)
         {
+            var id = routeId ?? querryId;
             // Check for null or empty ID
-            if (string.IsNullOrEmpty(id))
+            if (id == null || id == string.Empty)
             {
                 return BadRequest(new { message = "Tag ID is required." });
             }

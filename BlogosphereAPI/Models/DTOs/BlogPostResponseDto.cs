@@ -13,5 +13,6 @@
         public DateTime PublishedDate { get; set; }
         public bool Visible { get; set; }
         public List<TagDto> Tags { get; set; }
+        public int LikeCount { get; set; } = 0;
     }
 }

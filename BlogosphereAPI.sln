@@ -4,8 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogosphereAPI", "BlogosphereAPI\BlogosphereAPI.csproj", "{11058360-919D-4B8C-8495-842E7F239B1D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EF1F6B1B-7548-4539-AB0E-07E87B3CFBEC} = {EF1F6B1B-7548-4539-AB0E-07E87B3CFBEC}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogosphereUserAPI", "BlogosphereUserAPI\BlogosphereUserAPI.csproj", "{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogosphereUserAPI", "BlogosphereUserAPI\BlogosphereUserAPI.csproj", "{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BlogosphereAppApi", "BlogosphereAppApi", "{770F095A-2DAF-4AC2-A659-AC11180B3FD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogosphereGateway", "BlogosphereGateway\BlogosphereGateway.csproj", "{EF1F6B1B-7548-4539-AB0E-07E87B3CFBEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +28,17 @@ Global
 		{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF1F6B1B-7548-4539-AB0E-07E87B3CFBEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF1F6B1B-7548-4539-AB0E-07E87B3CFBEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF1F6B1B-7548-4539-AB0E-07E87B3CFBEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF1F6B1B-7548-4539-AB0E-07E87B3CFBEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{11058360-919D-4B8C-8495-842E7F239B1D} = {770F095A-2DAF-4AC2-A659-AC11180B3FD4}
+		{BA1FCAE5-2B23-492E-9BC2-DA7BD5C9E39D} = {770F095A-2DAF-4AC2-A659-AC11180B3FD4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2659ED4-3AAD-4CE1-9A75-F86DBAA5FBE7}

@@ -63,6 +63,7 @@ namespace BlogosphereAPI.Repositories
             // Fetch the blog with related tags
             var existingBlog = await context.Blogs
                 .Include(b => b.Tags)
+                .Include(b=>b.Likes)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             if (existingBlog != null)
@@ -101,7 +102,7 @@ namespace BlogosphereAPI.Repositories
         // Get all blog posts (returning DTOs to avoid circular reference)
         public async Task<IEnumerable<BlogPostResponseDto>> GetAllBlogsAsync()
         {
-            var blogPosts = await context.Blogs.Include(x => x.Tags).ToListAsync();
+            var blogPosts = await context.Blogs.Include(x => x.Tags).Include(x => x.Likes).ToListAsync();
 
             // Project to DTOs to avoid circular reference
             var blogPostDtos = blogPosts.Select(bp => new BlogPostResponseDto
@@ -121,7 +122,8 @@ namespace BlogosphereAPI.Repositories
                     Id = t.Id,
                     Name = t.Name,
                     DisplayName = t.DisplayName
-                }).ToList()
+                }).ToList(),
+                LikeCount=bp.Likes.Count,
             });
 
             return blogPostDtos;
@@ -132,6 +134,7 @@ namespace BlogosphereAPI.Repositories
         {
             return await context.Blogs
                 .Include(x => x.Tags) // Include related tags
+                .Include(x=>x.Likes) 
                 .Where(x => x.UrlHandle == urlhandle)
                 .Select(blog => new BlogPostResponseDto
                 {
@@ -150,7 +153,8 @@ namespace BlogosphereAPI.Repositories
                         Id = tag.Id,
                         Name = tag.Name,
                         DisplayName = tag.DisplayName
-                    }).ToList()
+                    }).ToList(),
+                    LikeCount=blog.Likes.Count,
                 })
                 .FirstOrDefaultAsync();
         }
@@ -161,6 +165,7 @@ namespace BlogosphereAPI.Repositories
         {
             return await context.Blogs
                 .Include(x => x.Tags) // Include related tags
+                .Include (x=>x.Likes)
                 .Where(x => x.Id == id)
                 .Select(blog => new BlogPostResponseDto
                 {
@@ -179,7 +184,8 @@ namespace BlogosphereAPI.Repositories
                         Id = tag.Id,
                         Name = tag.Name,
                         DisplayName = tag.DisplayName
-                    }).ToList()
+                    }).ToList(),
+                    LikeCount=blog.Likes.Count  
                 })
                 .FirstOrDefaultAsync();
         }

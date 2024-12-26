@@ -11,5 +11,8 @@ namespace BlogosphereAPI.Data
         }
         public DbSet<BlogPost> Blogs { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<BlogPostLike> BlogPostLikes { get; set; }
+        public DbSet<BlogPostComment> BlogPostComments { get; set; }
+
     }
 }
